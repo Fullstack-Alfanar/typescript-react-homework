@@ -12,11 +12,12 @@ jobs:
     node: [14,16,18]
     name: Node.js ${(matrix.node)} version 
     steps: 
-        -name: check repo 
-         uses: action/checkout@ V2 
-        -name: setup node version ${(matrix.node-version)}
-         uses: action/checkout@ V1 
- 
-        -run: npm install
-        -run: npm run build  
+        - name: check repo 
+         uses: action/checkout@V2 
+        - name: setup node version ${(matrix.node-version)}
+         uses: action/checkout@V1 
+        - name: npm insatll package
+          run: npm install
+        - name: run package
+          run: npm run build  
 
