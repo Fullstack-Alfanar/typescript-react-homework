@@ -4,19 +4,21 @@ on:
     branches: [main, develop, product]
   pull_request:
     branches: [main, develop, product]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node: [14, 16, 18]
-        name: [Node.js $(matrix.node) version]
-        steps:
-          - name: check repo
-            uses: action/checkout@V2
-          - name: setup node version ${(matrix.node-version)}
-            uses: action/checkout@V1
-          - name: npm insatll package
-            run: npm install
-          - name: run package
-            run: npm run build
+
+    steps:
+      - name: build node ubuntu
+        uses: actions/checkout@v3
+
+      - name: Node.js &{{matrix.node}}
+        uses: actions/setup-node@v3
+        with:
+          node: ${{matrix.node}}
+      - run: npm install
+      - run: npm run build
