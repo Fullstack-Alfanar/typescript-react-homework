@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Form.css";
+import { ValidateForm } from "./Util/validateform";
 
 const Form: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -8,48 +9,21 @@ const Form: React.FC = () => {
   const [passwordalert, setPasswordAlert] = useState("");
 
   const validateForm = () => {
-    const emailRegex =
-      /^[a-zA-Z0-9" ".!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const passwordRegex =
-      /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
-    const emailvalidation = () => {
-      if (emailRegex.test(email)) {
-        setEmailAlert("You entered a valid Email");
-        console.log("The Email is valid");
-        return true;
-      } else if (email == "") {
-        setEmail("You must enter an email address!!");
-        console.log("you must enter an email");
-        return false;
-      } else if (!emailRegex.test(email)) {
-        setEmail("You entered invalid email");
-        console.log("you entered invalid email");
-        return false;
-      }
-    };
-    const passwordvalidation = () => {
-      if (passwordRegex.test(password)) {
-        setPasswordAlert("Your password is valid");
-        console.log("true");
-        return true;
-      } else if (password == "") {
-        setPasswordAlert("you must choose a password");
-        console.log("you must enter a password");
-        return false;
-      } else if (!passwordRegex.test(password)) {
-        setPasswordAlert(
-          "Password must be minimum 8 characters and include at least 1 letter, 1 number and 1 special character!"
-        );
-        console.log("The Password is invalid");
+    const emailResult = ValidateForm.validateEmail(email);
+    if (!emailResult.status) {
+      console.log(emailResult.message);
+      setEmailAlert(emailResult.message);
+    }
 
-        return false;
-      }
-    };
-    if (emailvalidation() && passwordvalidation()) {
+    const passwordResult = ValidateForm.validatePassword(password);
+    if (!passwordResult.status) {
+      console.log(passwordResult.message);
+      setPasswordAlert(passwordResult.message);
+    }
+
+    if (emailResult.status && passwordResult.status) {
       alert("Successful Signin");
       console.log("Successful Signin");
-
-      return true;
     }
   };
 
